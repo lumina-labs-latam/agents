@@ -1,0 +1,12 @@
+#!/bin/bash
+
+repoPath="~/repos/filinSpa"   # Here might be better to add an environment variable.
+repoName="filinSpa"    # Here it'd be better to extract the name from repoPath directly. 
+
+agents=["steve", "layla", "boole"]
+
+ln -s "$repoPath" "$repoName"
+
+for agent in "$agents"; do
+	ln -s "$repoPath" ../"$agent"/workspace/"$repoName"
+done

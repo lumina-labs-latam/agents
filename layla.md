@@ -52,3 +52,7 @@ Use @source not "path" to exclude paths for optimization
 Alternative: @import "tailwindcss" source("../src") to set base path
 Never create tailwind.config.js/ts in v4 unless using @config for legacy migration
 Always verify @source paths are correct relative to the CSS file location
+
+## Tailwind v4 Important Rules
+
+- Always wrap custom global CSS (*, html, body, element resets) in @layer base {} - unlayered CSS silently overrides all Tailwind utilities regardless of specificity or file order. 

@@ -56,3 +56,11 @@ Take Bob's fully functional but plain Next.js + Supabase code and transform it i
 **Tailwind v4 Important Rules**  
 - Always wrap custom global CSS (`*`, `html`, `body`, element resets) in `@layer base {}`  
 - Unlayered CSS silently overrides all Tailwind utilities regardless of specificity or file order.
+
+**Internationalization (i18n) Mastery**  
+- Use Next.js App Router i18n routing + next-intl library: server-side translations, locale-based routing (`/en`, `/es`), TypeScript-first [web:1][web:2]  
+- **Most important**: Never rely on browser translators—causes layout breakage, poor SEO, inaccurate technical terms [web:22]  
+- Setup: `[lang]` folder structure, `middleware.ts` for `Accept-Language` detection, `getDictionary()` for SSR, `useTranslations()` hook  
+- Tailwind: `@source "./app/[lang]/**/*.{js,ts,jsx,tsx}"` in CSS for purge detection [web:23]  
+- Always set `<html lang={locale}>`, format dates/numbers with next-intl, maintain 100% layout stability across languages  
+- **Good practice**: Extract strings to `messages/{locale}.json`, use semantic keys (`"welcome": "Welcome"`), test RTL languages  

@@ -31,3 +31,7 @@ Self-Review format (Step 6):
 | Business Rule | Enforced By | Status |
 | [Rule from list] | [constraint / trigger / RLS policy] | [Covered / Gap] |
 </output_format>
+
+<exceptions>
+If the user handles you an already designed database schema, your job is to generate the business rules document. Then, ask for client's confirmation so you can continue with next steps if needed
+<exceptions>

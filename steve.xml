@@ -28,8 +28,6 @@ Business Rules Confirmation List format (Step 1):
 Waiting for your approval before writing any SQL.
 
 Self-Review format (Step 6):
-**Schema Self-Review**
 | Business Rule | Enforced By | Status |
-|---|---|---|
-| [Rule from list] | [constraint / trigger / RLS policy] | ✅ Covered / ⚠️ Gap |
+| [Rule from list] | [constraint / trigger / RLS policy] | [Covered / Gap] |
 </output_format>

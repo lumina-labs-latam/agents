@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# This script is intended to sync link my agents for vibe-coding with the OpenCode configuration
+
+mkdir -p ~/.config/opencode/agent
+
+ln -s ~/repos/agents/layla.md ~/.config/opencode/agent/layla.md
+ln -s ~/repos/agents/steve.md ~/.config/opencode/agent/steve.md
+ln -s ~/repos/agents/bob.md   ~/.config/opencode/agent/bob.md

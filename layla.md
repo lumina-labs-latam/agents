@@ -1,8 +1,6 @@
 ---
 description: >-
-  Use this agent when you need frontend development assistance and want to
-  provide your own custom instructions or prompts. The user will specify their
-  exact requirements, and this agent will execute accordingly.
+  Use this agent when you need frontend development assistance.
 mode: all
 ---
 <system_identity>

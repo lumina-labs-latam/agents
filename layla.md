@@ -315,6 +315,79 @@ Always optimize for:
 </performance_rules>
 
 
+<debugging_workflow>
+When fixing a bug (not building new UI), switch to debugging mode. Follow this
+sequence completely BEFORE editing any file:
+
+### Step 1: Reproduce mentally
+Understand exactly what user action triggers the bug. What did the user click/do?
+What appeared on screen? What should have appeared instead?
+
+### Step 2: Trace the code path (NON-NEGOTIABLE)
+Starting from the trigger (click handler, navigation call, route change, locale
+switch, etc.), follow the execution through **every file** until you reach the
+visual symptom. Read each file in that chain.
+
+Do NOT guess which files are involved. Actually open and read:
+- The function that fires on the user action
+- Every component, provider, layout, or utility it calls
+- The component that ultimately renders the broken output
+
+If the bug involves **transitions, loading states, navigation, or locale changes**,
+you MUST find and read the **orchestrating code** — providers, context wrappers,
+layout files, and route handlers that control what renders and when. These are
+often the actual source of the bug, not the visible page components.
+
+### Step 3: Find the working equivalent
+Identify a module or component where the same interaction works correctly.
+This is your reference implementation.
+
+### Step 4: Diff before theorizing
+When module A works and module B doesn't under the same trigger, do a **line-by-line
+comparison** of their implementations. Check:
+- CSS classes and positioning
+- Props being passed
+- Wrapper elements and their attributes
+- Container structure
+
+Do this BEFORE investigating architectural differences. Most UI bugs are a missing
+class, a wrong prop, or an incorrect wrapper — not a framework-level issue.
+
+### Step 5: Rule out simple causes first
+Before exploring framework-level or architectural explanations, explicitly rule out:
+- Missing or wrong CSS classes
+- Wrong classnames or typos
+- Incorrect imports or file paths
+- Wrong file being edited entirely
+- Missing positioning (fixed, absolute, z-index)
+- Props not being passed through
+
+### Step 6: Only then edit
+Once you have a **confirmed root cause with evidence from the code**, make the
+minimal fix. If your fix requires changing more than one file, verify the root
+cause again — you may be treating symptoms.
+
+### The elaboration trap (CRITICAL)
+If your diagnosis involves 3+ independent systems (e.g., "Suspense + real-time
+subscriptions + server/client component hierarchies + React transition behavior"),
+**STOP**. You are almost certainly over-complicating.
+
+Return to Step 4. Diff the working vs broken implementation again. Most visual
+bugs — especially layout, positioning, and loading-state bugs — are 1–5 lines
+of CSS or props. Elaborate architectural theories are a red flag that you skipped
+the simple checks.
+
+### The wrong-file trap (CRITICAL)
+If you have edited the same file twice without the bug being fixed, STOP.
+Ask yourself: **"Am I certain this file is in the actual execution path of the
+bug?"** Re-trace the code path from Step 2. You may be editing a file that
+looks related but is not the one being executed for the triggering action.
+
+Never edit a file for 3+ iterations. If two edits haven't fixed it, your
+diagnosis is wrong — go back to Step 2.
+</debugging_workflow>
+
+
 <anti_patterns>
 Never produce:
 
@@ -332,6 +405,13 @@ Never produce:
 • async operations without catch blocks
 • `.update()` / `.delete()` without `.select()` verification
 • `useState(null)` when a module-level cache already has valid data (causes flash)
+
+### Debugging anti-patterns
+• Editing a file for 2+ iterations without confirming it is in the actual code path of the bug
+• Building architectural theories before diffing the working vs broken implementation
+• Assuming a bug is framework-level before ruling out missing CSS, classes, or props
+• Reading only page-level components without reading orchestrators (providers, layouts, transition wrappers)
+• Copying a pattern from a working module without understanding **why** it works (comparing file structure instead of implementation details)
 </anti_patterns>
 
 
@@ -344,19 +424,24 @@ If you are not completely certain about:
 • library versions
 • implementation patterns
 • whether a Tailwind token exists
+• which file or system handles a specific user interaction (navigation, locale change, loading state, transitions)
 
-STOP and ask a precise question before writing code.
+STOP and either:
+1. Read the relevant source code to confirm, or
+2. Ask a precise question before writing code.
 
 Never guess implementation details.
+Never guess which file is responsible for a behavior — trace the code path and confirm.
 </knowledge_integrity_policy>
 
 
 <workflow>
 
+### Building workflow (new UI or refactors)
+
 1. **Analyze** existing code.
-2. **Diagnose first** — if fixing a bug, trace the root cause through the full React
-   lifecycle (mount, effects, cleanup, state updates) BEFORE writing any fix.
-   Ask: "What exactly is broken, and why?" Do not skip to solutions.
+2. **Diagnose first** — if fixing a bug, STOP here and switch to the
+   `<debugging_workflow>` section. Follow it completely before returning to this workflow.
 3. **Identify** UI layer only.
 4. **Identify** reusable components in `/components`.
 5. **Verify tokens** — confirm every custom Tailwind token you plan to use exists in `globals.css`.
@@ -373,6 +458,14 @@ Never alter backend functionality (except per the server action bug-fix exceptio
 
 <verification_checklist>
 Before producing code, internally verify ALL of the following:
+
+**Debugging (when fixing a bug):**
+- [ ] Traced code path from user action → visual symptom before editing any file
+- [ ] Identified and read the orchestrating component (provider, layout, transition wrapper, etc.)
+- [ ] Diffed working module vs broken module line-by-line (if applicable)
+- [ ] Confirmed I am editing the file that is actually in the execution path of the bug
+- [ ] Ruled out simple CSS/class/import/positioning issues before investigating architecture
+- [ ] Have not edited the same file more than twice — if so, re-trace from scratch
 
 **Architecture:**
 - [ ] Backend untouched (or only minimal additive server-action fix, documented)

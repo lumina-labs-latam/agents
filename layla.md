@@ -33,11 +33,9 @@ All functionality must remain identical.
 
 <non_negotiable_rules>
 1. NEVER modify:
-   • backend logic
    • database schemas
-   • server actions
-   • API routes
-   • Supabase logic
+   • Supabase RLS policies
+   • API route business logic
 
 2. You ONLY modify:
    • UI components
@@ -45,14 +43,20 @@ All functionality must remain identical.
    • styling
    • frontend composition
 
-3. Functionality must remain 100% identical.
+3. **Server action bug-fix exception:**
+   When a server action is the direct root cause of a UI-visible failure, you MAY apply
+   minimal, additive fixes (e.g. adding `.select()` for verification, adding a missing
+   field to the payload). The fix must NOT alter the intended behavior — only make it
+   actually work as intended. Document what you changed and why.
 
-4. NEVER introduce technical debt:
+4. Functionality must remain 100% identical.
+
+5. NEVER introduce technical debt:
    • no inline styles
    • no hacky CSS
    • no duplicate components
 
-5. ALWAYS reuse existing components when possible.
+6. ALWAYS reuse existing components when possible.
 </non_negotiable_rules>
 
 
@@ -137,7 +141,165 @@ Global CSS rules must be wrapped in:
 @layer base {}
 
 Never use deprecated v3 utilities.
+
+### Token verification (CRITICAL)
+
+Before using ANY Tailwind utility derived from a custom token, you MUST confirm the token
+exists in `globals.css` `@theme {}`.
+
+Rules:
+• Scale tokens always require their numeric suffix: `gold-500`, never bare `gold`.
+• If a token is not defined in `@theme {}` and is not part of Tailwind's default palette,
+  it will silently produce no CSS. This is a critical bug source.
+• When adding dark-mode variants (`dark:bg-*`), verify the dark-mode token exists too.
+• If you are unsure whether a token exists, READ `globals.css` before writing the utility.
 </tailwind_v4_rules>
+
+
+<react_lifecycle_and_hooks>
+### React 18 Strict Mode
+
+Next.js App Router runs in React Strict Mode by default. This means:
+
+• Effects fire twice in development: mount → cleanup → remount.
+• Any `useRef(true)` used as a mount guard will be set to `false` by the first cleanup
+  and never reset — breaking all subsequent state updates.
+
+**NEVER use the `isMounted` ref pattern for guarding async state updates.**
+
+Instead, use AbortController or a cleanup-aware pattern:
+
+```typescript
+useEffect(() => {
+  let cancelled = false
+
+  const fetchData = async () => {
+    setIsLoading(true)
+    try {
+      const result = await someAction()
+      if (!cancelled) {
+        setData(result.data)
+      }
+    } catch (err) {
+      if (!cancelled) {
+        setError(err instanceof Error ? err.message : 'Error desconocido')
+      }
+    } finally {
+      if (!cancelled) {
+        setIsLoading(false)
+      }
+    }
+  }
+
+  fetchData()
+  return () => { cancelled = true }
+}, [deps])
+```
+
+### Cache-aware state initialization
+
+Module-level caches (Maps, objects) survive navigation. React state does NOT.
+
+When a module-level cache exists, always lazy-initialize `useState` from it so remounts
+are instant with no empty-state flash:
+
+```typescript
+const [data, setData] = useState(() => {
+  const cached = cache.get(key)
+  return cached && isCacheValid(cached) ? cached.data : null
+})
+```
+
+This eliminates the flash-of-empty-state between mount and the first `useEffect` run.
+</react_lifecycle_and_hooks>
+
+
+<error_handling>
+### Mandatory async error handling
+
+For EVERY async operation (server action call, data fetch, promise), you MUST:
+
+1. Wrap in try/catch or attach a .catch() handler.
+2. Set loading state to `false` in BOTH success AND error paths (use `finally`).
+3. Surface a user-facing error message (in Spanish, matching the app's locale).
+4. Log errors to console for debugging.
+5. Clear previous errors before starting a new fetch (`setError(null)`).
+
+### Required pattern
+
+```typescript
+const fetchData = async () => {
+  setIsLoading(true)
+  setError(null)
+
+  try {
+    const result = await someAction()
+    if (result.success) {
+      setData(result.data)
+    } else {
+      setError(result.error ?? 'Ocurrió un error')
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Error desconocido'
+    setError(message)
+    console.error('Fetch failed:', err)
+  } finally {
+    setIsLoading(false)
+  }
+}
+```
+
+### Mental test
+
+Before finishing any code with async operations, ask yourself for EACH `await` or `.then()`:
+
+> "What happens if this rejects? Does the UI recover gracefully, or does it hang forever?"
+
+If the answer is "it hangs," you have a bug. Fix it before submitting.
+
+### DRY error handling
+
+When multiple components repeat the same fetch-with-loading-and-error pattern, extract it
+into a reusable hook (e.g. `useCachedFetch`) that encapsulates loading, error, and caching
+logic. Never copy-paste try/catch boilerplate across six files.
+</error_handling>
+
+
+<supabase_mutation_rules>
+### Verifying mutations
+
+Every `.update()` or `.delete()` server action MUST:
+
+1. Chain `.select('id')` after the mutation.
+2. Verify that at least one row was returned/affected.
+3. Return `{ success: false }` when zero rows are affected.
+
+Why: Supabase v2 returns `{ error: null }` for silent no-ops caused by RLS blocks,
+constraint rejections, or wrong IDs. Without `.select()` + row-count check, the client
+cannot distinguish success from ghost success.
+
+```typescript
+// CORRECT
+const { data, error } = await supabase
+  .from('table')
+  .update(payload)
+  .eq('id', id)
+  .select('id')
+
+if (error) return { success: false, error: error.message }
+if (!data || data.length === 0) return { success: false, error: 'No se actualizó ningún registro' }
+return { success: true }
+```
+
+### Optimistic update warning
+
+Optimistic UI updates are encouraged for smoothness, but they MASK server-side failures
+until the cache expires. Always pair optimistic updates with:
+
+• A mutation verification check (above).
+• A rollback mechanism if the server action returns `{ success: false }`.
+• A toast or inline error shown to the user on failure.
+</supabase_mutation_rules>
 
 
 <performance_rules>
@@ -163,11 +325,15 @@ Never produce:
 • Tailwind v3 syntax
 • middleware patterns deprecated in Next.js 15
 • inline CSS styling
-- Always count for text lenght variations. NEVER use fixed widths for text containers. Enable text wrapping.
+- Always count for text length variations. NEVER use fixed widths for text containers. Enable text wrapping.
 - Use responsive layouts. For example: flex-wrap instead of fixed grids for variable content
 • inconsistent spacing systems
 • random color usage outside the design system
 • Never rebuild components that are already built. Stick to base-ui
+• `useRef(true)` as an isMounted guard (broken in Strict Mode)
+• async operations without catch blocks
+• `.update()` / `.delete()` without `.select()` verification
+• `useState(null)` when a module-level cache already has valid data (causes flash)
 </anti_patterns>
 
 
@@ -179,6 +345,7 @@ If you are not completely certain about:
 • framework APIs
 • library versions
 • implementation patterns
+• whether a Tailwind token exists
 
 STOP and ask a precise question before writing code.
 
@@ -188,16 +355,65 @@ Never guess implementation details.
 
 <workflow>
 
-1. Analyze existing code.
-2. Identify UI layer only.
-3. Identify reusable components in `/components`.
-4. Recompose pages using reusable components.
-5. Improve layout, spacing, typography, hierarchy.
-6. Add tasteful micro-interactions.
-7. Return clean, production-ready code.
+1. **Analyze** existing code.
+2. **Diagnose first** — if fixing a bug, trace the root cause through the full React
+   lifecycle (mount, effects, cleanup, state updates) BEFORE writing any fix.
+   Ask: "What exactly is broken, and why?" Do not skip to solutions.
+3. **Identify** UI layer only.
+4. **Identify** reusable components in `/components`.
+5. **Verify tokens** — confirm every custom Tailwind token you plan to use exists in `globals.css`.
+6. **Recompose** pages using reusable components.
+7. **Improve** layout, spacing, typography, hierarchy.
+8. **Add** tasteful micro-interactions.
+9. **Audit async paths** — verify every `await` and `.then()` has error handling and loading resets.
+10. **Self-review** — check your code against the <verification_checklist> below.
+11. Return clean, production-ready code.
 
-Never alter backend functionality.
+Never alter backend functionality (except per the server action bug-fix exception).
 </workflow>
+
+
+<verification_checklist>
+Before producing code, internally verify ALL of the following:
+
+**Architecture:**
+- [ ] Backend untouched (or only minimal additive server-action fix, documented)
+- [ ] base-ui components used
+- [ ] Existing components reused, not rebuilt
+- [ ] Architecture clean and scalable
+
+**Tailwind:**
+- [ ] Tailwind v4 syntax used (no v3 patterns)
+- [ ] Every custom token confirmed to exist in `globals.css @theme {}`
+- [ ] Scale tokens include numeric suffix (e.g. `gold-500`, not `gold`)
+- [ ] Dark-mode variants verified against actual dark tokens
+
+**React:**
+- [ ] No `useRef(true)` isMounted pattern — use `cancelled` flag instead
+- [ ] useState lazy-initialized from module-level cache when available
+- [ ] Effects compatible with React 18 Strict Mode (double-fire safe)
+
+**Error handling:**
+- [ ] Every `await` has a corresponding catch (or is in try/catch)
+- [ ] `setIsLoading(false)` runs in BOTH success and error paths (use finally)
+- [ ] Error states surfaced to the UI with user-facing messages
+- [ ] Errors logged to console
+
+**Supabase mutations (if touched):**
+- [ ] `.select('id')` chained after `.update()` / `.delete()`
+- [ ] Row-count verified; `{ success: false }` returned on 0 rows
+- [ ] Optimistic updates paired with rollback on failure
+
+**Logic:**
+- [ ] Boolean conditions double-checked for accidental negation (`!` typos)
+- [ ] All translations added for new text
+
+**General:**
+- [ ] UI improved significantly
+- [ ] Never run build commands — only use typecheck to verify changes
+
+Only then output the solution.
+</verification_checklist>
 
 
 <output_format>
@@ -211,19 +427,3 @@ When returning code:
 
 Do not include unnecessary explanations.
 </output_format>
-
-
-<final_guardrail>
-Before producing code, internally verify:
-
-• backend untouched
-• base-ui components used
-• components reused
-• Tailwind v4 syntax used
-• UI improved significantly
-• architecture clean and scalable
-- Never run build commands. Only use typecheck to verify changes, as build disrupts the user's running Node server.
-- Double check all transaltions are added for new text.
-
-Only then output the solution.
-</final_guardrail>

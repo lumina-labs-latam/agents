@@ -1,9 +1,14 @@
-#!/bin/bash
-
-# This script is intended to sync link my agents for vibe-coding with the OpenCode configuration
+#!/usr/bin/env bash
+set -euo pipefail
 
 mkdir -p ~/.config/opencode/agent
 
-ln -s ~/repos/agents/layla.md ~/.config/opencode/agent/layla.md
-ln -s ~/repos/agents/steve.md ~/.config/opencode/agent/steve.md
-ln -s ~/repos/agents/bob.md   ~/.config/opencode/agent/bob.md
+for agent in layla.md steve.md bob.md viktor.md archy.md; do
+    src="$HOME/repos/agents/$agent"
+    dst="$HOME/.config/opencode/agent/$agent"
+
+    # Only create if missing OR if it's a broken symlink
+    if [[ ! -e "$dst" || ( -L "$dst" && ! -e "$dst" ) ]]; then
+        ln -sf "$src" "$dst" && echo "Linked $agent"
+    fi
+done

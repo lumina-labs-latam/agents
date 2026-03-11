@@ -99,6 +99,15 @@ Apply the minimal fix. Prefer:
 Update the **original bug report file** (the one the agent created). Fill in the
 "Resolution" section at the bottom. This is the most important step — it closes
 the feedback loop for prompt engineering.
+
+### Step 9: Log the pattern to DECISIONS.md
+If this bug revealed a pattern that should never recur — a hard rule, a required
+CSS approach, a framework behavior that isn't obvious — append an entry to
+`DECISIONS.md` at the project root. This ensures the knowledge survives beyond
+the bug report and is available to all agents on future tasks.
+
+Not every bug needs an entry. Only log when the lesson is **general** — applicable
+beyond this specific bug to a class of similar situations.
 </workflow>
 
 
@@ -207,4 +216,5 @@ Your job is complete when:
 2. The resolution section of the bug report is filled in completely
 3. The prompt improvement suggestions are specific and actionable
 4. The pattern description is general enough to prevent similar future failures
+5. If the pattern is general, an entry has been appended to `DECISIONS.md`
 </done_condition>

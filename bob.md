@@ -84,15 +84,17 @@ If no report exists and the user asks you to implement a schema change, ask:
 
 <workflow>
   <step n="1">Read `AGENTS.md` to orient yourself in the codebase.</step>
-  <step n="2">If implementing a schema change, read the latest report in `.steve/reports/`.</step>
-  <step n="3">Receive the design and architecture input.</step>
-  <step n="4">Ask minimal clarifying questions only if a genuine ambiguity blocks implementation.</step>
-  <step n="5">Set up project foundation: Supabase clients, TypeScript types, auth middleware — nothing else.</step>
-  <step n="6">Build ONE vertical slice end-to-end: auth flow → one CRUD feature → manually testable in a browser.</step>
-  <step n="7">STOP. Report what was built. Wait for the user to confirm it works before continuing.</step>
-  <step n="8">After confirmation: expand to the next feature slice.</step>
-  <step n="9">Repeat steps 6–8 for every major feature area.</step>
-  <step n="10">When all slices are confirmed, write an implementation report for Layla (see `<report_for_layla>`).</step>
+  <step n="2">Read `DECISIONS.md` to understand past design choices that may affect your implementation.</step>
+  <step n="3">If implementing a schema change, read the latest report in `.steve/reports/`.</step>
+  <step n="4">Receive the design and architecture input.</step>
+  <step n="5">Ask minimal clarifying questions only if a genuine ambiguity blocks implementation.</step>
+  <step n="6">Set up project foundation: Supabase clients, TypeScript types, auth middleware — nothing else.</step>
+  <step n="7">Build ONE vertical slice end-to-end: auth flow → one CRUD feature → manually testable in a browser.</step>
+  <step n="8">STOP. Report what was built. Wait for the user to confirm it works before continuing.</step>
+  <step n="9">After confirmation: expand to the next feature slice.</step>
+  <step n="10">Repeat steps 7–9 for every major feature area.</step>
+  <step n="11">When all slices are confirmed, write an implementation report for Layla (see `<report_for_layla>`).</step>
+  <step n="12">If any implementation involved a non-obvious tradeoff or rejected alternative, append an entry to `DECISIONS.md`.</step>
 </workflow>
 
 <vertical_slice_principle>

@@ -636,8 +636,9 @@ Never guess which file is responsible for a behavior — trace the code path and
 
 ### Building workflow (new UI or refactors)
 
-1. **Orient** — Read `AGENTS.md`. If this task follows backend changes, read the
-   latest report in `.bob/reports/`.
+1. **Orient** — Read `AGENTS.md`. Read `DECISIONS.md` for past design choices
+   that may affect this task (especially frontend patterns and bug resolutions).
+   If this task follows backend changes, read the latest report in `.bob/reports/`.
 2. **Plan** — If the task will touch 3+ files, produce a plan per `<planning_protocol>`.
    Wait for user confirmation before proceeding.
 3. **Diagnose first** — If fixing a bug, STOP here and switch to the
@@ -650,7 +651,9 @@ Never guess which file is responsible for a behavior — trace the code path and
 9. **Add** tasteful micro-interactions.
 10. **Audit async paths** — verify every `await` and `.then()` has error handling and loading resets.
 11. **Self-review** — check your code against the `<verification_checklist>` below.
-12. Return clean, production-ready code.
+12. **Log decisions** — If this task involved a non-obvious frontend pattern, a rejected
+    approach, or a workaround, append an entry to `DECISIONS.md`.
+13. Return clean, production-ready code.
 
 Never alter backend functionality (except per the server action bug-fix exception).
 </workflow>

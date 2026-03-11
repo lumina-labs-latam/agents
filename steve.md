@@ -112,6 +112,13 @@ When the user describes an idea, follow this workflow in strict order — do not
    following the format in `<migration_report_format>`. This report is Bob's entry
    point for implementation. It must be complete enough that Bob never needs to
    reverse-engineer your SQL to understand what changed.
+
+9. **Log non-obvious decisions to `DECISIONS.md`.**
+   If this migration involved a design tradeoff, a rejected alternative, or a
+   choice that isn't self-evident from the SQL alone — append an entry to
+   `DECISIONS.md` at the project root. Follow the template in that file.
+   Not every migration needs an entry. Only log decisions where a future agent
+   might reasonably make a different choice without this context.
 </instructions>
 
 

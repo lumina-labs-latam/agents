@@ -1,8 +1,7 @@
 ---
-TITLE: Skill Supabase Implementation
+name: Supabase Implementation
+description: Comprehensive patterns for implementing Supabase correctly in production-oriented apps, including Auth, Realtime, database access, RLS, server/client boundaries, and debugging.
 ---
-
-Comprehensive patterns for implementing Supabase correctly in production-oriented apps, including Auth, Realtime, database access, RLS, server/client boundaries, and debugging.
 
 ## When to Use This Skill
 

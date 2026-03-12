@@ -366,6 +366,273 @@ Always optimize for:
 </performance_rules>
 
 
+<data_flow_and_navigation_rules>
+
+### Internal Navigation (CRITICAL)
+
+In Next.js App Router applications, **all internal navigation must be soft navigation**.
+
+Forbidden patterns for internal routes:
+
+• window.location.href  
+• window.location.assign  
+• full document reloads  
+• any pattern that bypasses the App Router
+
+Allowed navigation mechanisms:
+
+• `<Link>`
+• `router.push`
+• locale-aware router helpers
+• framework navigation wrappers
+
+Hard navigation destroys the client route cache and eliminates prefetching benefits.  
+Use hard reloads only when explicitly required (e.g., leaving the app domain).
+
+---
+
+### Navigation performance principle
+
+Admin dashboards are **persistent applications**, not multi-page websites.
+
+Your navigation must preserve:
+
+• client state  
+• route cache  
+• prefetched data  
+
+If a navigation pattern resets the application state or forces a full refetch, it is likely incorrect.
+
+---
+
+### Data classification (MANDATORY)
+
+Before implementing any data fetching logic, classify the dataset into one of these categories:
+
+**Reference Data**
+Examples: clients, specialists, settings, configuration lists.
+
+Policy:
+• Long TTL caching  
+• Shared cache across modules  
+• Request dedupe required  
+• Avoid repeated refetch on remount
+
+---
+
+**Operational Snapshot Data**
+
+Examples:
+• agenda for a specific date  
+• transactions for a day  
+• dashboard summaries
+
+Policy:
+
+• Cached snapshot for instant revisit
+• Background revalidation
+• Optional realtime patching
+• Short TTL allowed
+
+Never force cold reloads for repeated visits.
+
+---
+
+**Live Realtime Data**
+
+Examples:
+• active sessions
+• real-time dashboards
+• collaborative state
+
+Policy:
+
+• initial snapshot
+• realtime updates
+• optimistic updates where possible
+
+Do not repeatedly refetch entire datasets when realtime patches are available.
+
+---
+
+### Shared fetch boundaries (CRITICAL)
+
+If multiple sibling components depend on the same dataset:
+
+Fetch **once at the nearest shared boundary** and distribute via:
+
+• context provider
+• shared hook
+• parent component state
+
+Never allow each child component to independently fetch the same operational dataset.
+
+---
+
+### Request deduplication
+
+All shared fetch abstractions must dedupe in-flight requests.
+
+Two components requesting the same resource simultaneously must **not trigger duplicate server calls**.
+
+Required strategy:
+
+• key-based request map
+• shared promise reuse
+• central fetch abstraction
+
+---
+
+### Cache persistence rules
+
+A cache must survive component unmounts when the data is expected to be reused.
+
+Forbidden pattern:
+
+component-local `useRef` caches for data needed across tab switches or remounts.
+
+Allowed cache locations:
+
+• module-level memory
+• shared hooks
+• context providers
+• sessionStorage (when refresh reuse matters)
+
+---
+
+### router.refresh() usage rules
+
+`router.refresh()` invalidates the route tree and refetches server components.
+
+It must **never be used as a default state update strategy.**
+
+Only use `router.refresh()` if ALL of the following are true:
+
+1. Local state cannot maintain correctness
+2. Realtime updates cannot solve the problem
+3. Targeted cache invalidation is not possible
+4. A server recomputation is actually required
+
+If these conditions are not met, do not use `router.refresh()`.
+
+---
+
+### Route revalidation rules
+
+Broad route revalidation (`revalidatePath`) must be treated as **expensive operations**.
+
+Before triggering route revalidation, ask:
+
+Does the UI actually require full route recomputation?
+
+Prefer instead:
+
+• optimistic updates
+• realtime patching
+• targeted cache invalidation
+
+---
+
+### Analytics query design
+
+For analytics or KPI dashboards:
+
+Minimize query count first.
+
+Preferred pattern:
+
+• fetch a full range dataset once
+• aggregate in memory
+• distribute results to multiple widgets
+
+Avoid:
+
+• one query per metric
+• one query per day
+• sequential queries for related data
+
+Unless there is a strict correctness reason.
+
+---
+
+### Revisit optimization requirement
+
+Admin dashboards are dominated by **repeated workflows**.
+
+Your implementation must optimize:
+
+• second visit to a module
+• tab switching
+• entity reopen
+• back-and-forth navigation
+• same-session revisits
+
+A workflow that reloads everything on every visit is considered inefficient.
+
+---
+
+### Bootstrap boundaries
+
+Every substantial module must define a **single bootstrap boundary**.
+
+Bootstrap data must be fetched:
+
+• once
+• at the module entry point
+• distributed downward
+
+Child components must not independently refetch bootstrap datasets.
+
+---
+
+### Signed URL caching
+
+For private assets accessed through signed URLs:
+
+Use layered caching:
+
+Layer 1 — fast memory cache  
+Layer 2 — sessionStorage persistence (when refresh reuse matters)
+
+Each cached entry must store:
+
+• the URL
+• an explicit expiry timestamp
+
+Before using a cached URL:
+
+1. Check expiry
+2. If expired, regenerate via server action
+3. Replace cache entry
+
+Never assume signed URLs remain valid indefinitely.
+
+---
+
+### Intent-based asset prefetch
+
+When a UI interaction strongly implies the user will open an asset container:
+
+Prefetch **only the first visible or highest-priority assets** in the background.
+
+Never preload entire asset collections unnecessarily.
+
+---
+
+### Performance implementation order
+
+When implementing UI features, follow this order of priorities:
+
+1. Navigation path correctness
+2. Data fetch strategy
+3. Cache strategy
+4. Cache invalidation policy
+5. Visual polish and animation
+
+Visual improvements must never mask inefficient data flow.
+
+</data_flow_and_navigation_rules>
+
 <planning_protocol>
 ### Mandatory planning for multi-file tasks
 

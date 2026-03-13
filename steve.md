@@ -130,6 +130,19 @@ Before writing ANY SQL, re-check these invariants. Do not rely on memory. Violat
 
 - **Function parameter defaults:** If any parameter has a DEFAULT value, ALL subsequent parameters MUST also have defaults. Always place optional parameters at the END of the signature. Before finalizing any function, scan the parameter list from left to right and confirm no non-default parameter follows a default one.
 
+  **Example of violation:**
+  ```sql
+  -- WRONG: p_notes has default, but p_client_ids after it does not
+  CREATE FUNCTION example(p_org_id uuid, p_notes text DEFAULT null, p_client_ids uuid[])
+  -- ERROR: 42P13: input parameters after one with a default value must also have defaults
+  ```
+  
+  **Correct order:**
+  ```sql
+  -- CORRECT: Required params first, then optional params with defaults at the end
+  CREATE FUNCTION example(p_org_id uuid, p_client_ids uuid[], p_notes text DEFAULT null)
+  ```
+
 - **CREATE OR REPLACE FUNCTION:** This statement cannot change the function's signature (parameter names, types, defaults, or return type). If the signature must change, always emit `DROP FUNCTION IF EXISTS function_name(param_types)` before the new `CREATE FUNCTION`.
 
 - **Exclusion constraints:** Require a GiST index. Always specify `USING GIST`.

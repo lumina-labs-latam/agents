@@ -30,4 +30,4 @@ Deploy to production.
 
 ## Deliverable
 
-Deployment report to `.bob/reports/2026-03-23-production-deploy.md`
+Deployment report to `bob/reports/2026-03-23-production-deploy.md`

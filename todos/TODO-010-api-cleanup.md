@@ -45,4 +45,4 @@ Likely keep (for now):
 
 ## Deliverable
 
-Report to `.bob/reports/2026-03-23-api-cleanup.md` listing deleted routes.
+Report to `bob/reports/2026-03-23-api-cleanup.md` listing deleted routes.

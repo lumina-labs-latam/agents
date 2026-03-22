@@ -26,7 +26,7 @@ Create/modify `lib/catalog/actions.ts`:
 - [ ] `toggleProductActive(id, isActive)` — status toggle
 - [ ] `getCategories()` — for dropdown (already exists, verify)
 
-Report to `.bob/reports/YYYY-MM-DD-products-actions.md`
+Report to `bob/reports/YYYY-MM-DD-products-actions.md`
 
 ---
 

@@ -53,7 +53,7 @@ app/api/admin/
 - [ ] Identify API routes with NO server action equivalent
 - [ ] Document which routes can be safely deleted
 - [ ] Document which routes need server actions created
-- [ ] Write report to `.bob/reports/2026-03-23-api-audit.md`
+- [ ] Write report to `bob/reports/2026-03-23-api-audit.md`
 
 ---
 

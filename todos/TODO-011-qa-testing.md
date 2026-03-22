@@ -43,6 +43,6 @@ Comprehensive QA of all migrated functionality.
 
 ## Deliverable
 
-Report to `.viktor/reports/2026-03-23-migration-qa.md` with:
+Report to `viktor/reports/2026-03-23-migration-qa.md` with:
 - Pass/fail per feature
 - Bugs found (if any) with repro steps

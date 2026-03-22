@@ -1,64 +1,61 @@
-# TODO-001: Initialize Products Page
+# TODO-001: Products Page — Full Stack Implementation
 
 **Status:** 🔴 Ready to assign  
 **Priority:** High  
-**Estimated:** 2-3 hours  
-**Assigned to:** (pending)
+**Estimated:** 3-4 hours split between Bob + Layla  
+**Assigned to:** Bob (backend) → Layla (frontend)
 
 ---
 
 ## Objective
 
-Wire up the Products admin page with full CRUD via server actions.
+Build the Products admin page with full CRUD.
 
 ---
 
-## Requirements
+## Part 1: Bob — Server Actions
 
-### UI (Steve)
-- [ ] Product grid with pagination
-- [ ] Create product modal/form
-- [ ] Edit product drawer
-- [ ] Delete confirmation (soft delete)
-- [ ] Image upload placeholder (Bob to wire actual upload)
-- [ ] Category dropdown (fetch from DB)
-- [ ] Status toggle (active/draft/archived)
-
-### Backend (Layla)
-- [ ] `getProducts()` — paginated list with filters
+Create/modify `lib/catalog/actions.ts`:
+- [ ] `getAllProducts()` — paginated list with filters (search, category, status)
 - [ ] `getProductById(id)` — single product for edit
-- [ ] `createProduct(formData)` — Zod validation
+- [ ] `createProduct(formData)` — Zod validation, insert product
 - [ ] `updateProduct(id, formData)` — partial updates
-- [ ] `deleteProduct(id)` — soft delete (set deleted_at)
-- [ ] `getCategories()` — for dropdown
+- [ ] `softDeleteProduct(id)` — soft delete (set deleted_at)
+- [ ] `toggleProductActive(id, isActive)` — status toggle
+- [ ] `getCategories()` — for dropdown (already exists, verify)
 
-### Integration
+Report to `.bob/reports/YYYY-MM-DD-products-actions.md`
+
+---
+
+## Part 2: Layla — Frontend UI
+
+Build `app/admin/products/page.tsx`:
+- [ ] Product grid/table with pagination
+- [ ] Search/filter by name, category, status
+- [ ] Create product modal/form
+- [ ] Edit product drawer/sheet
+- [ ] Delete confirmation dialog (soft delete)
+- [ ] Image upload placeholder (Bob wires later)
+- [ ] Category dropdown
+- [ ] Status toggle (active/draft/archived)
+- [ ] Stock management field
 - [ ] Error handling with toast notifications
 - [ ] Optimistic updates for status toggle
-- [ ] Revalidate on mutations
+- [ ] i18n keys in `messages/es.json` and `messages/en.json`
 
 ---
 
 ## Handoff Path
 
 ```
-Steve (UI skeleton) → Layla (server actions) → Steve (wire together) → Bob (test deploy)
+Bob (server actions) → Layla (UI implementation)
 ```
-
----
-
-## References
-
-- Pattern: See `frontend/app/[locale]/dashboard/orders/` for similar implementation
-- Types: Use generated Supabase types
-- i18n: Add keys to `messages/es.json` and `messages/en.json`
 
 ---
 
 ## Notes
 
-Products table exists in Supabase. Schema:
-```sql
-id, name, description, price, category_id, image_url, 
-stock, status, created_at, updated_at, deleted_at
-```
+- Products table already exists in Supabase
+- Pattern: See `app/admin/currencies/page.tsx` for established server action pattern
+- Types: Use generated `lib/database.types.ts`

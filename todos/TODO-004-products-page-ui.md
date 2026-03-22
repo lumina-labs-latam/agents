@@ -1,5 +1,7 @@
 # TODO-004: Products Page — UI Scaffold
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** High  
 **Estimated:** 2 hours  

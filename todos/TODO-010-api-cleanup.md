@@ -1,5 +1,7 @@
 # TODO-010: API Routes Cleanup — Remove Redundant Routes
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** Medium  
 **Estimated:** 1 hour  

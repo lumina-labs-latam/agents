@@ -1,5 +1,7 @@
 # TODO-007: Store Settings Page — Migration + Polish
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** Medium  
 **Estimated:** 1.5 hours  

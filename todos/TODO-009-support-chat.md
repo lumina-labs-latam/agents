@@ -1,5 +1,7 @@
 # TODO-009: Support Chat — Evaluate & Implement
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** Low  
 **Estimated:** 4-8 hours (if real-time)  

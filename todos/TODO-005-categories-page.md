@@ -1,5 +1,7 @@
 # TODO-005: Categories Page — Full Implementation
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** High  
 **Estimated:** 1.5 hours  

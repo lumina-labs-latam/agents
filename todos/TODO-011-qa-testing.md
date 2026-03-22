@@ -1,5 +1,7 @@
 # TODO-011: QA Testing — Viktor Validates All Migrations
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** High  
 **Estimated:** 2-3 hours  

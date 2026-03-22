@@ -1,5 +1,7 @@
 # TODO-012: Deployment — Production Deploy
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** High  
 **Estimated:** 1 hour  

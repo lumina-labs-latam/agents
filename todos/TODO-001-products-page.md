@@ -1,5 +1,7 @@
 # TODO-001: Products Page — Full Stack Implementation
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** High  
 **Estimated:** 3-4 hours split between Bob + Layla  

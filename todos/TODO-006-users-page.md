@@ -1,5 +1,7 @@
 # TODO-006: Users Page — Backend + Frontend
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** Medium  
 **Estimated:** 3 hours split between Bob + Layla  

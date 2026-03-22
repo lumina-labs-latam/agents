@@ -1,5 +1,7 @@
 # TODO-003: Frontend Tidy Up — Migrate Admin Pages to Server Actions
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** High  
 **Estimated:** 2-3 hours  

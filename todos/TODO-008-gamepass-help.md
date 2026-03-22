@@ -1,5 +1,7 @@
 # TODO-008: Gamepass Help Page — Migration
 
+**Project:** ~/repos/sakus-store/frontend
+**Working Directory:** `~/repos/sakus-store`
 **Status:** 🔴 Ready to assign  
 **Priority:** Low  
 **Estimated:** 1 hour  

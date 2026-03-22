@@ -1,29 +1,19 @@
-# Agent Hub Decisions Log
+# Architecture Decision Log
 
-**Project:** Sakus Store  
-**Initialized:** 2026-03-23  
-**Purpose:** Track architectural and workflow decisions made by agents
+This file is the shared memory of the development team. Every non-obvious
+technical decision is recorded here so that future work doesn't contradict,
+undo, or re-debate past choices.
 
----
-
-## Decision Template
-
-```markdown
-### DECISION-XXX: [Title]
-**Date:** YYYY-MM-DD  
-**Agent:** [Name]  
-**Context:** [What problem are we solving?]  
-**Options Considered:**
-1. [Option A]
-2. [Option B]
-**Decision:** [What we chose]  
-**Rationale:** [Why]  
-**Consequences:** [Trade-offs, future implications]
-```
+**Who writes here:** Steve, Viktor, Bob, Layla, Archy
+**When to write:** After making a decision where the "why" isn't obvious from
+the code alone — design tradeoffs, rejected alternatives, regulatory constraints,
+bug patterns that must not recur.
+**When NOT to write:** Routine implementation choices, obvious patterns, anything
+self-evident from reading the code.
 
 ---
 
-## Agent Responsibilities (Corrected)
+## Agent Responsibilities
 
 | Agent | Primary Role | Stack Focus | Reports To |
 |-------|-------------|-------------|------------|
@@ -54,6 +44,17 @@ Bugs:               Any → Archy (escalated)
 4. **Complete** → Todo moved to `.agents/archive/`, decision logged here if needed
 
 ---
+
+<!-- TEMPLATE — copy this block for each new entry
+
+## YYYY-MM-DD — [Short title: what was decided]
+**Agent:** [Steve / Viktor / Bob / Layla / Archy]
+**Context:** [1-2 sentences: what problem or question triggered this decision]
+**Decision:** [What was chosen and how it works]
+**Why not the alternative:** [What was rejected and why]
+**Revisit if:** [Under what future conditions this decision should be reconsidered]
+
+-->
 
 ## Decisions Made
 

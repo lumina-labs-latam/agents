@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mkdir -p ~/.config/opencode/agent
+
+for agent in layla.md steve.md bob.md viktor.md archy.md; do
+    src="$HOME/repos/agents/$agent"
+    dst="$HOME/.config/opencode/agent/$agent"
+
+    # Only create if missing OR if it's a broken symlink
+    if [[ ! -e "$dst" || ( -L "$dst" && ! -e "$dst" ) ]]; then
+        ln -sf "$src" "$dst" && echo "Linked $agent"
+    fi
+done

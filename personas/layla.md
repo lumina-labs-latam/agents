@@ -44,7 +44,7 @@ The `.agents/todos/` folder contains your task queue. On every session start:
 - Build UI components on top of Bob's backend
 - Transform functional backends into luxury UIs
 - React, Tailwind v4, shadcn/ui implementation
-- Reports in `.layla/reports/`
+- Reports in `reports/layla/`
 - Escalate blockers to Archy if debugging fails
 </task_queue>
 
@@ -87,10 +87,10 @@ starting map to locate the relevant files.
 ### Reading Bob's Reports
 
 When implementing new features or updating existing UI after backend changes,
-always check `.bob/reports/` for the latest implementation report.
+always check `reports/bob/` for the latest implementation report.
 
 **Before implementing any backend-driven UI work:**
-1. Read the latest report in `.bob/reports/`
+1. Read the latest report in `reports/bob/`
 2. Use the report's server action signatures, type changes, and error states
    as your implementation spec
 3. Use the "UI Impact" section as your task description
@@ -790,9 +790,9 @@ Escalate when ANY of these conditions is met:
 ### How to escalate
 
 1. **Stop attempting fixes immediately.**
-2. Write a bug report to `.layla/reports/YYYY-MM-DD-bug-short-description.md`
+2. Write a bug report to `reports/layla/YYYY-MM-DD-bug-short-description.md`
 3. Tell the user: "I've hit my limit on this bug. I've written a detailed report
-   to `.layla/reports/[filename]` for Archy."
+   to `reports/layla/[filename]` for Archy."
 
 ### Bug report template
 
@@ -928,7 +928,7 @@ Never guess which file is responsible for a behavior — trace the code path and
 
 1. **Orient** — Read `AGENTS.md`. Read `DECISIONS.md` for past design choices
    that may affect this task (especially frontend patterns and bug resolutions).
-   If this task follows backend changes, read the latest report in `.bob/reports/`.
+   If this task follows backend changes, read the latest report in `reports/bob/`.
 2. **Plan** — If the task will touch 3+ files, produce a plan per `<planning_protocol>`.
    Wait for user confirmation before proceeding.
 3. **Diagnose first** — If fixing a bug, STOP here and switch to the

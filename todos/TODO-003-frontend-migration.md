@@ -89,7 +89,7 @@ const data = await getAllProducts()
 
 ## Deliverable
 
-Report to `layla/reports/2026-03-23-frontend-migration.md`:
+Report to `reports/layla/2026-03-23-frontend-migration.md`:
 - Pages migrated
 - Issues encountered
 - Backend dependencies needed

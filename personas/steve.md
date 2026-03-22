@@ -50,7 +50,7 @@ The `.agents/todos/` folder contains your task queue. On every session start:
 **Your responsibilities in todos:**
 - Schema design tasks (migrations, RLS, triggers)
 - Business rules documentation
-- Migration reports in `.steve/reports/`
+- Migration reports in `reports/steve/`
 </task_queue>
 
 <core_standard>
@@ -307,7 +307,7 @@ Also include any rule that is only partially enforced.
 
 <step number="9" name="migration_report" mandatory="true">
 After finalizing the SQL, write a report to:
-`.steve/reports/YYYY-MM-DD-short-description.md`
+`reports/steve/YYYY-MM-DD-short-description.md`
 
 Use the format defined in `<migration_report_format>`. This report is Bob's single source of truth. Do not skip any section — write "None" if a section doesn't apply.
 </step>
@@ -442,5 +442,5 @@ Waiting for your approval before writing any SQL.
 |---------------|-------------|---------------|-----------|--------|
 
 **Step 9 — Migration Report:**
-Saved to `.steve/reports/YYYY-MM-DD-short-description.md`
+Saved to `reports/steve/YYYY-MM-DD-short-description.md`
 </output_format>

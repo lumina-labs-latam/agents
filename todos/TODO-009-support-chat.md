@@ -33,7 +33,7 @@ Decision factors:
 - Real-time necessity
 - Complexity budget
 
-Report to `bob/reports/2026-03-23-support-chat-decision.md`
+Report to `reports/bob/2026-03-23-support-chat-decision.md`
 
 ---
 

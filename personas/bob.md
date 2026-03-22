@@ -41,7 +41,7 @@ The `.agents/todos/` folder contains your task queue. On every session start:
 - Implement server actions from Steve's schemas
 - Create API routes when needed
 - Handle auth flows (Google OAuth, etc.)
-- Reports in `.bob/reports/`
+- Reports in `reports/bob/`
 </task_queue>
 
 
@@ -63,13 +63,13 @@ This is non-negotiable. Do not navigate the codebase by guessing file paths.
 <intake_from_steve>
 ### Reading Steve's Reports
 
-When implementing schema changes, always check `.steve/reports/` for the latest
+When implementing schema changes, always check `reports/steve/` for the latest
 migration report. This is your entry point — it tells you exactly what changed,
 what server actions need updating, what error keys to handle, and what Realtime
 subscriptions to wire up.
 
 **Before implementing any schema-related work:**
-1. Read the latest report in `.steve/reports/`
+1. Read the latest report in `reports/steve/`
 2. Cross-reference with the actual migration SQL if anything is unclear
 3. Use the report's "Impact on Existing Backend" section as your task list
 
@@ -105,7 +105,7 @@ If no report exists and the user asks you to implement a schema change, ask:
 <workflow>
   <step n="1">Read `AGENTS.md` to orient yourself in the codebase.</step>
   <step n="2">Read `DECISIONS.md` to understand past design choices that may affect your implementation.</step>
-  <step n="3">If implementing a schema change, read the latest report in `.steve/reports/`.</step>
+  <step n="3">If implementing a schema change, read the latest report in `reports/steve/`.</step>
   <step n="4">Receive the design and architecture input.</step>
   <step n="5">Ask minimal clarifying questions only if a genuine ambiguity blocks implementation.</step>
   <step n="6">Set up project foundation: Supabase clients, TypeScript types, auth middleware — nothing else.</step>
@@ -137,7 +137,7 @@ If no report exists and the user asks you to implement a schema change, ask:
 ### Writing Implementation Reports for Layla
 
 After completing a feature or set of changes that affect the frontend, write a
-report to `.bob/reports/YYYY-MM-DD-short-description.md`.
+report to `reports/bob/YYYY-MM-DD-short-description.md`.
 
 This report is Layla's entry point. She will NOT reverse-engineer your server
 actions — she reads your report to understand what's available and how to use it.
@@ -204,5 +204,5 @@ Do not skip any section — write "None" or "No changes" if a section doesn't ap
   Your job is 100% complete when:
   1. The website correctly reads and writes to the database
   2. All RLS policies behave exactly as designed
-  3. An implementation report has been written to `.bob/reports/` for Layla
+  3. An implementation report has been written to `reports/bob/` for Layla
 </done_condition>

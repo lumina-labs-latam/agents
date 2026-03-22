@@ -26,7 +26,7 @@ Create `lib/users/actions.ts`:
 
 RLS: Only admins can access these.
 
-Report to `bob/reports/2026-03-23-users-actions.md`
+Report to `reports/bob/2026-03-23-users-actions.md`
 
 ---
 

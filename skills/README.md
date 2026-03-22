@@ -203,11 +203,11 @@ vercel logs [deployment-url]
 Each agent writes reports to their own folder:
 
 ```
-.steve/reports/     # Database migration reports
-.viktor/reports/    # QA test results
-.bob/reports/       # Backend implementation reports
-.layla/reports/     # Frontend implementation reports
-.archy/reports/     # Bug resolution reports
+reports/steve/     # Database migration reports
+reports/viktor/    # QA test results
+reports/bob/       # Backend implementation reports
+reports/layla/     # Frontend implementation reports
+reports/archy/     # Bug resolution reports
 ```
 
 ---

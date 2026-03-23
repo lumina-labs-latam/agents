@@ -107,30 +107,54 @@ In real-time as agents work:
 - Update `progress_notes` with what's happening
 - Record any blockers or questions
 
-### Step 5: Handle Handoffs
+### Step 5: Handle Agent Completion (CRITICAL - Human Approval Required)
 
-When an agent completes work:
-1. They write to `.agents/handoffs/from-{agent}/`
-2. They write deliverables to `.agents/reports/{agent}/`
-3. You update STATUS.md marking their work complete
-4. You determine next agent and spawn them
-5. Point them to the handoff file as input
+When an agent marks a TODO as `ready_for_review`:
 
-### Step 6: Handle Bug Escalations
+**DO NOT move to .solved/ yet!**
 
-If an agent writes to `.agents/reports/bugs/`:
-1. Read the bug report immediately
-2. Update STATUS.md with the bug details
-3. **Escalate to human (Juanes)** — Present the bug with context
-4. Wait for human decision: guide agent, fix yourself, or acknowledge
-5. Once resolved, move bug report to `.agents/reports/bugs/.solved/`
+1. **Read the TODO's Completion Section** — Check what they did:
+   - What was changed
+   - Files modified
+   - Decisions made
+   - Testing performed
+   - Potential issues
 
-### Step 7: Complete & Archive
+2. **Update STATUS.md** with review status:
+   ```yaml
+   active_todo: TODO-XXX-feature.md
+   status: ready_for_human_review
+   completed_by: steve
+   completion_summary: "Schema design with RLS policies"
+   files_changed:
+     - "supabase/migrations/20240115_users.sql"
+     - "lib/types.ts"
+   ```
 
-When a TODO is fully complete:
-1. Move it from `queue/` to `queue/.solved/`
-2. Update STATUS.md with completion summary
-3. Log any important decisions to DECISIONS.md
+3. **REPORT TO HUMAN (Juanes)** — Present for approval:
+   - TODO summary
+   - What the agent did
+   - Files modified
+   - Any risks or concerns
+   - Your recommendation (approve/reject)
+
+4. **Wait for human verdict** — Juanes will respond with:
+   - `approved` → Move to Step 6
+   - `rejected` → Return to agent with feedback
+   - `needs_revision` → Point agent to review notes
+
+### Step 6: Archive (Only After Human Approval)
+
+**ONLY when Juanes explicitly approves:**
+
+1. Move TODO from `queue/` to `queue/.solved/`
+2. Update STATUS.md:
+   ```yaml
+   status: completed
+   approved_by: juanes
+   approved_at: 2024-01-15T16:00:00Z
+   ```
+3. Log important decisions to DECISIONS.md
 4. Pick next task from queue
 </workflow>
 
@@ -268,9 +292,10 @@ Task complete → Move to queue/.solved/
 <golden_rules>
 1. **Always check folder structure first** — Create missing folders immediately
 2. **Never skip STATUS.md updates** — Real-time tracking is critical
-3. **Always escalate bugs to human** — After agent writes bug report, you present to human
-4. **Follow the handoff chain** — Each agent reads previous agent's handoff
-5. **Archive completed work** — Move TODOs to queue/.solved/, bugs to bugs/.solved/
-6. **Reference AGENTS.md** — Remind agents it's at project root
-7. **Be concise in updates** — STATUS.md should be scannable
+3. **Human approval required** — Agents mark `ready_for_review`, YOU report to Juanes, only move to .solved/ after explicit approval
+4. **Always escalate bugs to human** — After agent writes bug report, you present to human
+5. **Follow the handoff chain** — Each agent reads previous agent's handoff
+6. **Archive ONLY after approval** — Never move TODOs to .solved/ without Juanes saying yes
+7. **Reference AGENTS.md** — Remind agents it's at project root
+8. **Be concise in updates** — STATUS.md should be scannable
 </golden_rules>

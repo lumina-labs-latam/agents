@@ -14,17 +14,17 @@ Real-time tracking of development progress. Updated continuously by the Orchestr
 ```yaml
 active_todo: TODO-001-feature.md
 active_agent: steve
-status: pending
-started_at: 
-progress: 0%
+status: pending|in_progress|ready_for_human_review|approved|blocked
+started_at: 2024-01-15T10:00:00Z
+progress: 75%
 ```
 
 ### Pipeline Position
 
 ```
-[Steve] → [Viktor] → [Bob] → [Viktor] → [Layla] → [Ship]
-   ↑
-Current
+[Steve] → [Viktor] → [Bob] → [Viktor] → [Layla] → [Human Review] → [Ship]
+   ↑                                                                  ↑
+Current                                                          Approved
 ```
 
 ---
@@ -34,8 +34,25 @@ Current
 ### TODO-001-feature.md
 - **[TIMESTAMP]** — Task created, assigned to Steve
 - **[TIMESTAMP]** — Steve started work
-- **[TIMESTAMP]** — Steve completed schema design
-- **[TIMESTAMP]** — Handed off to Viktor for QA
+- **[TIMESTAMP]** — Steve completed, marked ready_for_review
+- **[TIMESTAMP]** — Reported to Juanes for approval
+- **[TIMESTAMP]** — **APPROVED by Juanes** → moved to .solved/
+
+---
+
+## 🔔 Ready for Human Review (CRITICAL)
+
+**These TODOs are done but waiting for Juanes' approval:**
+
+### TODO-XXX-feature.md
+- **Status:** ready_for_review
+- **Completed by:** steve
+- **Summary:** Schema design with RLS
+- **Files changed:** migrations/20240115_users.sql
+- **Risk:** None identified
+- **Recommendation:** ✅ Approve
+
+**Action needed:** Juanes to review and approve/reject
 
 ---
 
@@ -87,7 +104,8 @@ Current
 - **[BUG-XXX-description.md]** — Fixed by [AGENT] on [DATE]
   - Resolution: Brief description
   - Moved to: .agents/reports/bugs/.solved/
---
+  - Approved by: juanes
+-->
 
 ---
 
@@ -99,8 +117,9 @@ Current
 - **[TODO-XXX-description.md]** — Completed by [AGENT] on [DATE]
   - Duration: X hours
   - Key deliverables: Brief list
+  - Approved by: juanes
   - Moved to: .agents/queue/.solved/
---
+-->
 
 ---
 
@@ -112,7 +131,11 @@ Current
 2. TODO-002-api.md — Bob (waiting)
 3. TODO-003-ui.md — Layla (waiting)
 
-### Recently Completed
+### Ready for Review (Waiting for Juanes)
+
+*None currently*
+
+### Recently Completed (Approved)
 
 *None yet*
 
@@ -129,3 +152,25 @@ Current
 ## Notes
 
 *Any additional context for the human*
+
+---
+
+## How to Approve/Reject
+
+**When you see a TODO in "Ready for Human Review":**
+
+1. Read the TODO file (check the Completion Section)
+2. Test/review the changes if needed
+3. Edit the TODO and add to "Human Review Section":
+   ```yaml
+   reviewed_at: 2024-01-15T16:00:00Z
+   reviewed_by: juanes
+   verdict: approved|rejected|needs_revision
+   ```
+4. Add your review notes
+5. Tell the orchestrator your decision
+
+**The orchestrator will then:**
+- If `approved` → Move to .solved/
+- If `rejected` → Return to agent with your feedback
+- If `needs_revision` → Point agent to your notes

@@ -31,17 +31,10 @@ Projects using this orchestrator follow this structure:
 │   ├── STATUS.md                # Real-time project state
 │   │
 │   ├── queue/                   # Task queue (you manage this)
-│   │   ├── TODO-001-feature.md
-│   │   └── .solved/             # Archive completed tasks
+│   │   ├── TODO-001-feature.md  # Active TODOs
+│   │   └── .solved/             # Archive completed (human approved)
 │   │
-│   ├── handoffs/                # Agent communication
-│   │   ├── from-steve/
-│   │   ├── from-viktor/
-│   │   ├── from-bob/
-│   │   ├── from-layla/
-│   │   └── from-archy/
-│   │
-│   └── reports/                 # Agent deliverables
+│   └── reports/                 # Agent deliverables & bug reports
 │       ├── steve/
 │       ├── viktor/
 │       ├── bob/
@@ -50,6 +43,8 @@ Projects using this orchestrator follow this structure:
 │       └── bugs/                # Bug escalation reports
 │           └── .solved/         # Archive solved bugs
 ```
+
+**Note:** Handoff files eliminated. All context lives in TODO Completion Section.
 
 ### AGENTS.md Reference
 
@@ -67,7 +62,7 @@ If any folders are missing, create them immediately:
 
 ```bash
 # Check and create structure if missing
-mkdir -p .agents/{queue/.solved,handoffs/from-{steve,viktor,bob,layla,archy},reports/{steve,viktor,bob,layla,archy,bugs/.solved}}
+mkdir -p .agents/{queue/.solved,reports/{steve,viktor,bob,layla,archy,bugs/.solved}}
 touch .agents/DECISIONS.md
 touch .agents/STATUS.md
 ```
@@ -88,7 +83,7 @@ a minimal template for them to fill in.
 
 Select the highest priority TODO from `.agents/queue/`:
 - Check the `assigned_to` field
-- Verify prerequisites are complete (check handoffs from previous agents)
+- Verify prerequisites are complete (read previous agent's TODO Completion Section)
 
 ### Step 3: Spawn Agent
 
@@ -229,9 +224,9 @@ When spawning an agent, provide clear context:
 
 1. **Their role** — Who they are in the pipeline
 2. **The task** — What TODO file to read
-3. **Input handoff** — Where to read previous agent's work
-4. **Output location** — Where to write their handoff
-5. **Reports location** — Where to write deliverables
+3. **Previous work** — Read previous agent's TODO Completion Section
+4. **Reports location** — Where to write technical deliverables
+5. **Completion** — Fill the TODO Completion Section when done
 
 Example delegation to Steve:
 ```
@@ -239,11 +234,10 @@ You are Steve, the database architect.
 
 Task: Read .agents/queue/TODO-001-schema.md
 Input: None (this is the start of the pipeline)
-Output handoff: .agents/handoffs/from-steve/HANDOFF-001.md
 Reports: .agents/reports/steve/
 
 Design the schema per the TODO requirements. Follow your persona guidelines.
-Write your migration report to reports/steve/ and handoff to handoffs/from-steve/.
+Fill the Completion Section in the TODO when done. Write technical details to reports/steve/.
 ```
 
 Example delegation to Bob:
@@ -251,12 +245,12 @@ Example delegation to Bob:
 You are Bob, the backend engineer.
 
 Task: Read .agents/queue/TODO-002-api.md
-Input handoff: Read .agents/handoffs/from-viktor/HANDOFF-001.md (QA approval)
-Previous reports: Check .agents/reports/steve/ for schema details
-Output handoff: .agents/handoffs/from-bob/HANDOFF-002.md
+Previous work: Read TODO-001 Completion Section for schema details
+Previous reports: Check .agents/reports/steve/ for technical details
 Reports: .agents/reports/bob/
 
 Implement server actions based on Steve's schema and Viktor's tests.
+Fill the Completion Section in the TODO when done.
 ```
 </agent_communication>
 
@@ -268,19 +262,21 @@ New Task in queue/
     ↓
 Orchestrator (you) assigns to appropriate agent
     ↓
-Steve → Schema design → reports/steve/ + handoffs/from-steve/
+Steve → Schema design → Fill TODO Completion Section + reports/steve/
     ↓
-Viktor → QA tests → reports/viktor/ + handoffs/from-viktor/
+Viktor → QA tests → Fill TODO Completion Section + reports/viktor/
     ↓
-Bob → Backend implementation → reports/bob/ + handoffs/from-bob/
+Bob → Backend implementation → Fill TODO Completion Section + reports/bob/
     ↓
-Viktor → Verify server actions → reports/viktor/ + handoffs/from-viktor/
+Viktor → Verify server actions → Fill TODO Completion Section + reports/viktor/
     ↓
-Layla → Frontend UI → reports/layla/ + handoffs/from-layla/
+Layla → Frontend UI → Fill TODO Completion Section + reports/layla/
     ↓
-(If bugs) → Archy → Debug → reports/archy/ + handoffs/from-archy/
+(If bugs) → Archy → Debug → Fill TODO Completion Section + reports/archy/
     ↓
-Task complete → Move to queue/.solved/
+Agent marks ready_for_review → Orchestrator reports to Juanes
+    ↓
+Juanes approves → Move to queue/.solved/
 ```
 
 **Variations:**
@@ -294,7 +290,7 @@ Task complete → Move to queue/.solved/
 2. **Never skip STATUS.md updates** — Real-time tracking is critical
 3. **Human approval required** — Agents mark `ready_for_review`, YOU report to Juanes, only move to .solved/ after explicit approval
 4. **Always escalate bugs to human** — After agent writes bug report, you present to human
-5. **Follow the handoff chain** — Each agent reads previous agent's handoff
+5. **Read the chain** — Each agent reads previous TODO's Completion Section
 6. **Archive ONLY after approval** — Never move TODOs to .solved/ without Juanes saying yes
 7. **Reference AGENTS.md** — Remind agents it's at project root
 8. **Be concise in updates** — STATUS.md should be scannable

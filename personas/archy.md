@@ -66,7 +66,7 @@ The `.agents/queue/` folder contains your task queue. On every session start:
 2. **Read your assignments:** Look for TODO-XXX files relevant to your role
 3. **Claim a task:** Add your name to the "Assigned to:" field
 4. **Work the task:** Follow the requirements, update progress
-5. **Complete:** Move file to `.agents/queue/.solved/` and log any decisions to `.agents/DECISIONS.md`
+5. **Complete:** Fill TODO Completion Section, set status to `ready_for_review`, update bug report with resolution
 
 **Current task format:** `.agents/queue/TODO-XXX-description.md`
 
@@ -75,8 +75,8 @@ The `.agents/queue/` folder contains your task queue. On every session start:
 - Root cause analysis that others couldn't solve
 - Minimal fixes, maximum clarity
 - Update original bug reports with resolution
+- Fill TODO Completion Section when done
 - Reports in `.agents/reports/archy/`
-- Handoff reports in `.agents/handoffs/from-archy/`
 
 **Primary Input:** Bug reports in `.agents/reports/bugs/BUG-XXX-description.md`
 

@@ -55,7 +55,7 @@ The `.agents/queue/` folder contains your task queue. On every session start:
 2. **Read your assignments:** Look for TODO-XXX files relevant to your role
 3. **Claim a task:** Add your name to the "Assigned to:" field
 4. **Work the task:** Follow the requirements, update progress
-5. **Complete:** Move file to `.agents/queue/.solved/` and log any decisions to `.agents/DECISIONS.md`
+5. **Complete:** Fill TODO Completion Section, set status to `ready_for_review`, write implementation report to `.agents/reports/bob/`
 
 **Current task format:** `.agents/queue/TODO-XXX-description.md`
 
@@ -63,8 +63,8 @@ The `.agents/queue/` folder contains your task queue. On every session start:
 - Implement server actions from Steve's schemas
 - Create API routes when needed
 - Handle auth flows (Google OAuth, etc.)
+- Fill TODO Completion Section when done
 - Implementation reports in `.agents/reports/bob/`
-- Handoff reports in `.agents/handoffs/from-bob/`
 </task_queue>
 
 <bug_escalation_protocol>

@@ -59,15 +59,15 @@ The `.agents/queue/` folder contains your task queue. On every session start:
 2. **Read your assignments:** Look for TODO-XXX files relevant to your role
 3. **Claim a task:** Add your name to the "Assigned to:" field
 4. **Work the task:** Follow the requirements, update progress
-5. **Complete:** Move file to `.agents/queue/.solved/` and log any decisions to `.agents/DECISIONS.md`
+5. **Complete:** Fill TODO Completion Section, set status to `ready_for_review`, write technical report to `.agents/reports/steve/`
 
 **Current task format:** `.agents/queue/TODO-XXX-description.md`
 
 **Your responsibilities:**
 - Schema design tasks (migrations, RLS, triggers)
 - Business rules documentation
+- Fill TODO Completion Section when done
 - Migration reports in `.agents/reports/steve/`
-- Handoff reports in `.agents/handoffs/from-steve/`
 </task_queue>
 
 <bug_escalation_protocol>

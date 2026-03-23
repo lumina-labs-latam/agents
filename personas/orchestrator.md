@@ -285,6 +285,54 @@ Juanes approves → Move to queue/.solved/
 - Bug fixes: Any agent → Archy (if escalated)
 </pipeline_flow>
 
+<database_migration_protocol>
+### Handling Database Migrations (Supabase) - STRICT PROTOCOL
+
+When an agent (usually Steve) creates a database migration:
+
+**Step 1: Agent Creates Migration**
+- Agent writes migration to `supabase/migrations/YYYY-MM-DD_description.sql`
+- Agent marks TODO as `ready_for_review` with migration details in Completion Section
+- Agent reports: migration file path, what it does, any risks
+
+**Step 2: Orchestrator Reviews and Attempts Local Execution**
+
+1. Read the migration file - Check the SQL
+
+2. **STRICT CLI-FIRST PROTOCOL** - You MUST use Supabase CLI commands:
+   
+   **ALWAYS try these in order:**
+   ```bash
+   cd ~/repos/project-name && npx supabase migration up
+   # OR if migration system is not initialized:
+   cd ~/repos/project-name && npx supabase db reset
+   # OR for production (after human approval):
+   cd ~/repos/project-name && npx supabase db push
+   ```
+   
+   **If CLI commands fail** after 2 attempts, escalate to human - do NOT try workarounds.
+
+3. Update STATUS.md with pending_migration info
+
+4. Present to Juanes with summary including local execution result
+
+**Step 3: Execute or Reject**
+
+- If approved: Run migration via Supabase CLI (cd ~/repos/project-name && npx supabase db push)
+  Then update STATUS.md: status = applied
+  
+- If rejected: Return to agent with feedback, remove migration file if needed
+
+**ABSOLUTELY FORBIDDEN:**
+- NEVER write Node.js/TypeScript scripts to insert data manually
+- NEVER use service role keys to bypass migrations
+- NEVER use `supabase.from().insert()` for seed/migration data
+- NEVER bypass the migration tracking system
+- NEVER apply SQL directly via Supabase Dashboard instead of CLI
+
+The Supabase CLI is the single source of truth for database state. Manual workarounds break migration history and cause drift.
+</database_migration_protocol>
+
 <golden_rules>
 1. **Always check folder structure first** — Create missing folders immediately
 2. **Never skip STATUS.md updates** — Real-time tracking is critical
@@ -294,4 +342,5 @@ Juanes approves → Move to queue/.solved/
 6. **Archive ONLY after approval** — Never move TODOs to .solved/ without Juanes saying yes
 7. **Reference AGENTS.md** — Remind agents it's at project root
 8. **Be concise in updates** — STATUS.md should be scannable
+9. **Try migrations locally first** — Always attempt `npx supabase db push` before asking for approval
 </golden_rules>

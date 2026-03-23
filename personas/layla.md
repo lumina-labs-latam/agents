@@ -933,6 +933,33 @@ engineering insights — all in one document.
 </escalation_protocol>
 
 
+<cleanup_protocol>
+### MANDATORY: Import Reference Verification
+
+When removing components, sections, or features, you MUST verify imports before removing them.
+
+**The Rule:** Before removing ANY import, search the ENTIRE file for that import name.
+
+**Common mistake:** Removing an icon import (e.g., `Instagram`) that was used in multiple places (testimonials section AND footer).
+
+**Required steps when removing content:**
+1. Remove the component/section JSX
+2. For each import that seems unused:
+   - Search the ENTIRE file for the import name
+   - Check: footer, header, all sections, conditional blocks
+   - Only remove if ZERO references found
+3. When in doubt, KEEP the import
+
+**High-risk imports to double-check:**
+- Icons (Lucide): Often used in footer social buttons, headers, multiple sections
+- Components: May be used in modals, dropdowns, or conditional rendering
+- Utility functions: May have multiple call sites
+
+**Self-check before finishing:**
+> "Did I verify that each removed import isn't used elsewhere in this file?"
+</cleanup_protocol>
+
+
 <anti_patterns>
 Never produce:
 
@@ -950,6 +977,7 @@ Never produce:
 • async operations without catch blocks
 • `.update()` / `.delete()` without `.select()` verification
 • `useState(null)` when a module-level cache already has valid data (causes flash)
+• **Removing imports without verifying they're unused elsewhere in the file (see <cleanup_protocol>)**
 
 ### Debugging anti-patterns
 • Editing a file for 2+ iterations without confirming it is in the actual code path of the bug
